@@ -1,0 +1,36 @@
+<%- include ('../partials/header') %>
+<div class="container my-5">
+    <header class="jumbotron">
+        <h1>Contact Me</h1>
+    </header>
+
+    <div>
+        <form style="display: block;"> 
+            <label for="fname">First Name</label>
+            <input type="text" name="firstname" placeholder="Your name..">
+
+        </br>
+
+            <label for="lname">Last Name</label>
+            <input type="text" name="lastname" placeholder="Your last name..">
+
+        </br>
+
+            <label for="country">Country</label>
+            <select id="country" name="country">      
+                <option value="canada">Canada</option>
+                <option value="usa">USA</option>
+            </select>
+
+        </br>
+
+            <label for="subject">Subject</label>
+            <textarea id="subject" name="subject" placeholder="Write something.."></textarea>
+        </br>
+            <input type="submit" value="Submit">
+        </form>
+
+        <img src="../assets/Koala.jpg" alt="Koala">
+    </div>
+</div>
+<%- include ('../partials/footer') %>
