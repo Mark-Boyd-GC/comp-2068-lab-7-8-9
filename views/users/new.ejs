@@ -1,41 +1,45 @@
-<%- include ('../partials/header')  %> 
+<%- include ('../partials/header') %>
 
 <div class="container my-5">
   <header>
     <h1>Register New User</h1>
   </header>
-  <hr>
+  <hr />
 
   <div>
     <form action="/users" method="post">
       <div class="form-group">
         <label for="firstName">First Name:</label>
-        <input class="form-control" type="text" name="firstName">
+        <input class="form-control" type="text" name="firstName" />
       </div>
 
       <div class="form-group">
         <label for="lastName">Last Name:</label>
-        <input class="form-control" type="text" name="lastName">
+        <input class="form-control" type="text" name="lastName" />
       </div>
 
       <div class="form-group">
         <label for="email">Email:</label>
-        <input class="form-control" type="email" name="email">
+        <input class="form-control" type="email" name="email" />
       </div>
 
       <div class="form-group">
         <label for="emailConfirmation">Email Confirmation:</label>
-        <input class="form-control" type="email" name="emailConfirmation">
+        <input class="form-control" type="email" name="emailConfirmation" />
       </div>
 
       <div class="form-group">
         <label for="password">Password:</label>
-        <input class="form-control" type="password" name="password">
+        <input class="form-control" type="password" name="password" />
       </div>
 
       <div class="form-group">
         <label for="passwordConfirmation">Password Confirmation:</label>
-        <input class="form-control" type="password" name="passwordConfirmation">
+        <input
+          class="form-control"
+          type="password"
+          name="passwordConfirmation"
+        />
       </div>
 
       <div class="form-group">
@@ -45,4 +49,4 @@
   </div>
 </div>
 
-<%- include ('../partials/footer')  %> 
+<%- include ('../partials/footer') %>

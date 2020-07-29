@@ -4,56 +4,47 @@ const User = require('../models/user');
 
 exports.index = async (req, res) => {
   try {
-    const blogs = await Blog
-      .find()
+    const blogs = await Blog.find()
       .populate('user')
-      .sort({updatedAt: 'desc'});
+      .sort({ updatedAt: 'desc' });
 
-    res.render(`${viewPath}/index`, {
-      pageTitle: 'Archive',
-      blogs: blogs
-    });
+    res.status(200).json(blogs);
   } catch (error) {
-    req.flash('danger', `There was an error displaying the archive: ${error}`);
-    res.redirect('/');
+    res
+      .status(400)
+      .json({ message: 'There was an error fetching the blogs', error });
   }
 };
 
 exports.show = async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id)
-      .populate('user');
-    console.log(blog);
-    res.render(`${viewPath}/show`, {
-      pageTitle: blog.title,
-      blog: blog
-    });
+    const blog = await Blog.findById(req.params.id).populate('user');
+
+    res.status(200).json(blog);
   } catch (error) {
-    req.flash('danger', `There was an error displaying this blog: ${error}`);
-    res.redirect('/');
+    res.status(400).json({ message: 'There was an error fetching the blog' });
   }
 };
 
 exports.new = (req, res) => {
   res.render(`${viewPath}/new`, {
-    pageTitle: 'New Blog'
+    pageTitle: 'New Blog',
   });
 };
 
 exports.create = async (req, res) => {
+  console.log(req.body);
   try {
-    console.log(req.session.passport);
     const { user: email } = req.session.passport;
-    const user = await User.findOne({email: email});
-    console.log('User', user);
-    const blog = await Blog.create({user: user._id, ...req.body});
+    const user = await User.findOne({ email: email });
 
-    req.flash('success', 'Blog created successfully');
-    res.redirect(`/blogs/${blog.id}`);
+    const blog = await Blog.create({ user: user._id, ...req.body });
+
+    res.status(200).json(blog);
   } catch (error) {
-    req.flash('danger', `There was an error creating this blog: ${error}`);
-    req.session.formData = req.body;
-    res.redirect('/blogs/new');
+    res
+      .status(400)
+      .json({ message: 'There was an error creating the blog post', error });
   }
 };
 
@@ -62,7 +53,7 @@ exports.edit = async (req, res) => {
     const blog = await Blog.findById(req.params.id);
     res.render(`${viewPath}/edit`, {
       pageTitle: blog.title,
-      formData: blog
+      formData: blog,
     });
   } catch (error) {
     req.flash('danger', `There was an error accessing this blog: ${error}`);
@@ -73,12 +64,12 @@ exports.edit = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const { user: email } = req.session.passport;
-    const user = await User.findOne({email: email});
+    const user = await User.findOne({ email: email });
 
     let blog = await Blog.findById(req.body.id);
     if (!blog) throw new Error('Blog could not be found');
 
-    const attributes = {user: user._id, ...req.body};
+    const attributes = { user: user._id, ...req.body };
     await Blog.validate(attributes);
     await Blog.findByIdAndUpdate(attributes.id, attributes);
 
@@ -92,12 +83,9 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
   try {
-    console.log(req.body);
-    await Blog.deleteOne({_id: req.body.id});
-    req.flash('success', 'The blog was deleted successfully');
-    res.redirect(`/blogs`);
+    await Blog.deleteOne({ _id: req.body.id });
+    res.status(200).json({ message: 'Yay.' });
   } catch (error) {
-    req.flash('danger', `There was an error deleting this blog: ${error}`);
-    res.redirect(`/blogs`);
+    res.status(400).jason({ message: 'There was an error deleting the blog' });
   }
 };

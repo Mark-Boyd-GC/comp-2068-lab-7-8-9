@@ -6,15 +6,17 @@ const path = require('path');
 
 // Mongo access
 const mongoose = require('mongoose');
-mongoose.connect(process.env.DB_URI, {
-  auth: {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS
-  },
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true
-}).catch(err => console.error(`Error: ${err}`));
+mongoose
+  .connect(process.env.DB_URI, {
+    auth: {
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+    },
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
+  .catch((err) => console.error(`Error: ${err}`));
 
 // Implement Body Parser
 const bodyParser = require('body-parser');
@@ -24,11 +26,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Setup our session
 const passport = require('passport');
 const session = require('express-session');
-app.use(session({
-  secret: 'any salty secret here',
-  resave: true,
-  saveUninitialized: false
-}));
+app.use(
+  session({
+    secret: 'any salty secret here',
+    resave: true,
+    saveUninitialized: false,
+  })
+);
 
 // Setting up Passport
 app.use(passport.initialize());
@@ -51,13 +55,13 @@ const flash = require('connect-flash');
 app.use(flash());
 app.use('/', (req, res, next) => {
   // Setting default locals
-  res.locals.pageTitle = "Untitled";
+  res.locals.pageTitle = 'Untitled';
 
   // Passing along flash message
   res.locals.flash = req.flash();
   res.locals.formData = req.session.formData || {};
   req.session.formData = {};
-  
+
   // Authentication helper
   res.locals.authorized = req.isAuthenticated();
   if (res.locals.authorized) res.locals.email = req.session.passport.user;
@@ -67,8 +71,17 @@ app.use('/', (req, res, next) => {
 
 // Our routes
 const routes = require('./routes.js');
-app.use('/', routes);
+app.use('/api', routes);
+
+app.get('/test', (req, res) => {
+  res.status(200).json({ message: 'Hello World' });
+});
+
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
+});
 
 // Start our server
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Listening on port ${port}`));

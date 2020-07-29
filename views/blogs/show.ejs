@@ -8,13 +8,13 @@
         <i class="fa fa-edit"></i>
       </a>
     </h1>
-    <br>
+    <br />
     <small>
       <%= (blog.updatedAt.toLocaleString("en-CA")) %>
     </small>
     <p><strong>By: <%= blog.user.fullname %></strong></p>
   </header>
-  <hr>
+  <hr />
   <div class="content">
     <%- blog.content %>
   </div>

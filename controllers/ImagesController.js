@@ -6,13 +6,13 @@ exports.index = async (req, res) => {
 
   res.render(`${viewPath}/index`, {
     pageTitle: 'Images',
-    images
+    images,
   });
 };
 
 exports.new = (req, res) => {
   res.render(`${viewPath}/new`, {
-    pageTitle: 'New Image'
+    pageTitle: 'New Image',
   });
 };
 
@@ -22,7 +22,7 @@ exports.create = async (req, res) => {
   await Image.create({
     fileName: req.file.originalname,
     data: encoded,
-    mimeType: req.file.mimetype
+    mimeType: req.file.mimetype,
   });
 
   res.redirect('/images');
